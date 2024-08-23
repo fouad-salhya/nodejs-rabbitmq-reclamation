@@ -24,7 +24,7 @@ export const signup = async (req: Request, res: Response) => {
   if(!user) {
     return res.status(400).json({ message: "User not Created" })
   }  
-    rabbitMQService.sendUserId(user.user_id)
+  
     return res.status(201).json({ message: "User created" })
 
   } catch (error) {
@@ -64,6 +64,9 @@ export const signin = async (req: Request, res: Response) => {
 
     const user_id = user.user_id
     const role = user.role
+
+    await rabbitMQService.sendUserId(user_id)
+
 
     res.status(200).json({ token, user: { user_id, role } });
   } catch (error) {
