@@ -9,16 +9,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  user_id   String   @default(uuid()) 
-  name      String
-  email     String   @unique
-  phone     String?
-  adresse   String?
-  password  String
-  role      Role   @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int      @id @default(autoincrement())
+  reclamation_id String?  @unique
+  user_id        String   @default(uuid()) 
+  name           String
+  email          String   @unique
+  phone          String?
+  adresse        String?
+  password       String
+  role           Role     @default(USER)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 enum Role {
