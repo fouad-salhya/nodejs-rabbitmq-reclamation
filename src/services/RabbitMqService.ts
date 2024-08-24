@@ -17,13 +17,20 @@ class RabbitMqService {
     await this.channel.assertQueue(this.reclamationQueue, { durable: true, arguments: { 'x-queue-type': 'quorum' } });
   }
 
-  async sendUserId(userId: string) {
-    this.channel.sendToQueue(this.queue, Buffer.from(userId), { persistent: true });
+  async sendUserDetails(userId: string, role: string) {
+
+    const userDetails = {
+      userId: userId,
+      role: role
+  };
+
+    const message = JSON.stringify(userDetails);
+
+    this.channel.sendToQueue(this.queue, Buffer.from(message), { persistent: true });
     console.log(`j'ai envoyer userId a springboot ${this.queue}: ${userId}`);
   }
 
 
-  // Recevoir et mettre à jour la dernière valeur de reclamationId
   async receiveReclamationId(): Promise<string> {
     return new Promise((resolve, reject) => {
       this.channel.consume(this.reclamationQueue, (msg) => {

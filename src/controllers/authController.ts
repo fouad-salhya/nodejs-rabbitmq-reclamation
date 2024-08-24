@@ -65,7 +65,7 @@ export const signin = async (req: Request, res: Response) => {
     const user_id = user.user_id
     const role = user.role
 
-    await rabbitMQService.sendUserId(user_id)
+    await rabbitMQService.sendUserDetails(user_id, role)
 
 
     res.status(200).json({ token, user: { user_id, role } });

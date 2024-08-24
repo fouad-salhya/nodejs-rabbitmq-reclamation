@@ -4,8 +4,8 @@ import { getAllUsers, getUserById, updateUser} from '../controllers/userControll
 
 const router = Router();
 
-router.get('/all', [authMiddleware, isAdmin, updateUser], getAllUsers)
-router.get('/:id', getUserById)
+router.get('/all', [authMiddleware, isAdmin], getAllUsers)
+router.get('/:id',[authMiddleware,updateUser], getUserById)
 
 
 export default router;
