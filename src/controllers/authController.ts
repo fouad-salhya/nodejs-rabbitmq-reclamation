@@ -22,13 +22,13 @@ export const signup = async (req: Request, res: Response) => {
    })
     
   if(!user) {
-    return res.status(400).json({ message: "User not Created" })
+    return res.status(400).json({err: "User not Created" })
   }  
   
     return res.status(201).json({ message: "User created" })
 
-  } catch (error) {
-    return res.status(500).json({error});
+  } catch (err) {
+    return res.status(500).json({err});
   }
   
 
@@ -48,11 +48,11 @@ export const signin = async (req: Request, res: Response) => {
       }
     });
 
-    if(!user) return res.status(404).json({message: 'user not found'})
+    if(!user) return res.status(404).json({err: 'user not found'})
 
     const isPasswordValid = await bcrypt.compare(password, user.password!);
     
-    if(!isPasswordValid) return  res.json({ message: 'password incorrect' })
+    if(!isPasswordValid) return  res.json({err: 'password incorrect' })
 
     const token = generateToken(user.user_id, user.role)
        
@@ -64,13 +64,15 @@ export const signin = async (req: Request, res: Response) => {
 
     const user_id = user.user_id
     const role = user.role
+    const message = "autheticated successfully"
+
 
     await rabbitMQService.sendUserDetails(user_id, role)
 
 
-    res.status(200).json({ token, user: { user_id, role } });
-  } catch (error) {
-    res.status(500).json({error});
+    res.status(200).json({ token, user: { user_id, role }, message });
+  } catch (err) {
+    res.status(500).json({err});
   }
 };
 

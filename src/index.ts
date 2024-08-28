@@ -18,6 +18,10 @@ config({ path: envPath });
 
 const app:Express = express()
 
+const corsOptions = {
+  origin: 'http://localhost:4200', 
+  optionsSuccessStatus: 200
+};
 
 // Utiliser les middlewares
 app.use(morgan('dev'));
@@ -25,7 +29,7 @@ app.use(helmet.hidePoweredBy());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Utiliser les routes
 app.use('/api/auth', authRoutes);
