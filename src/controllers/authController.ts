@@ -38,7 +38,7 @@ export const signin = async (req: Request, res: Response) => {
 
   const { email, password } = req.body;
   try {
-    const user: any = await prisma.user.findUnique({ 
+    const user = await prisma.user.findUnique({ 
       where: { email }, 
       select: {
         user_id:true,
@@ -64,7 +64,7 @@ export const signin = async (req: Request, res: Response) => {
 
     const user_id = user.user_id
     const role = user.role
-    const message = "autheticated successfully"
+    const message = "authenticated successfully"
 
 
     await rabbitMQService.sendUserDetails(user_id, role)
@@ -77,6 +77,11 @@ export const signin = async (req: Request, res: Response) => {
 };
 
 export const signout = (req: Request, res: Response) => {
-  res.clearCookie('jwt');
-  res.status(200).json({ message: 'User signed out' });
+  try {
+    res.clearCookie('jwt');  
+    res.status(200).json({ message: 'User signed out' }); 
+  } catch (err) {
+
+    res.status(500).json({ err: 'An error occurred while signing out.' });
+  }
 };
